@@ -1,18 +1,20 @@
 #include <stdio.h>
+void swap(char *a, char *b) {
+    char *t = a;
+    a = b;
+    b = t;
+}
 int main()
 {
-		short int n=0;
-	unsigned long long x;
-	scanf("%lld",&x);
-	
-	do{
-		n++;
-		x/=10;
-	}
-	while(x>0);
+	char str1[] = "hello";
+char str2[] = "world";
+char *p1 = str1;
+char *p2 = str2;
 
-    printf("%d\n",n);
+swap(p1, p2);
+
+    printf("%s %s",p1,p2);
 	
 
-	return 1; 
+	return 0; 
 }
