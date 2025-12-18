@@ -1,0 +1,156 @@
+一，智能指针
+可以自动处理拷贝和移动，自动析构无需手动delete
+
+1.std::unique_ptr - 独占所有权（性能更好）
+
+（1）.用法
+#include <memory>
+
+// 创建 unique_ptr
+std::unique_ptr<int> ptr1 = std::make_unique<int>(42);
+auto ptr2 = std::make_unique<std::string>("Hello");
+
+// 访问对象
+std::cout << *ptr1 << std::endl;  // 解引用
+std::cout << ptr2->length() << std::endl;  // 箭头操作符
+
+// 获取原始指针（谨慎使用）
+int* raw_ptr = ptr1.get();
+
+（2）.独占性
+std::unique_ptr<int> ptr1 = std::make_unique<int>(100);
+
+// 错误：不能拷贝
+// std::unique_ptr<int> ptr2 = ptr1;
+
+// 正确：转移所有权，现在 ptr1 为空，ptr2 拥有对象
+std::unique_ptr<int> ptr2 = std::move(ptr1);
+
+2.std::shared_ptr - 共享所有权
+
+（1）.用法
+#include <memory>
+void demonstrate_shared_ptr() {
+    auto ptr1 = std::make_shared<MyClass>();
+    std::cout << ptr1.use_count() << std::endl;  // 1
+    {
+        auto ptr2 = ptr1;
+        std::cout << ptr1.use_count() << std::endl;  // 2
+    }  // ptr2 离开作用域
+    std::cout << ptr1.use_count() << std::endl;  // 1
+}  // ptr1 离开作用域，对象被销毁
+
+3.std::weak_ptr - 弱引用（观察而不拥有）
+
+std::shared_ptr<int> shared = std::make_shared<int>(42);
+std::weak_ptr<int> weak = shared;
+
+// 检查对象是否还存在
+if (auto locked = weak.lock()) {
+    std::cout << "Object exists: " << *locked << std::endl;
+} else {
+    std::cout << "Object has been destroyed" << std::endl;
+}
+
+二，静态函数
+特点：
+1.不依赖于对象实例
+class MathUtils {
+public:
+    static double pi() { return 3.14159; }
+    static int add(int a, int b) { return a + b; }
+};
+
+// 使用：不需要创建对象
+double circle_area = MathUtils::pi() * radius * radius;
+int sum = MathUtils::add(5, 3);
+
+2.没有this指针
+不能访问实例数据，不能调用非静态成员函数
+class Calculator {
+private:
+    static int call_count;  // 静态成员变量
+    
+public:
+    static int multiply(int a, int b) {
+        // 不能访问非静态成员
+        // this->some_member;  // 错误！
+        
+        call_count++;  // 可以访问静态成员
+        return a * b;
+    }
+};
+
+作用：
+1.工具函数和工具类
+class StringUtils {
+public:
+    static std::string toUpper(const std::string& str);
+    static std::string trim(const std::string& str);
+    static bool startsWith(const std::string& str, const std::string& prefix);
+};
+// 使用
+auto upper = StringUtils::toUpper("hello");
+bool match = StringUtils::startsWith(filename, "config");
+
+2.工厂模式
+class Executor {
+public:
+    static std::unique_ptr<Executor> Create(const Pose& pose = {0, 0, 'N'}) {
+        return std::make_unique<ExecutorImpl>(pose);
+    }
+    
+    static std::unique_ptr<Executor> CreateFromConfig(const std::string& config_path) {
+        // 根据配置文件创建不同的实现
+        auto config = loadConfig(config_path);
+        if (config.type == "vehicle") {
+            return std::make_unique<VehicleExecutor>(config);
+        } else {
+            return std::make_unique<SimulationExecutor>(config);
+        }
+    }
+};
+// 使用
+auto executor1 = Executor::Create({10, 20, 'E'});
+auto executor2 = Executor::CreateFromConfig("config.json");
+
+3.单例模式
+4.计数器和管理器
+优点：
+• ✅ 无需实例化：直接通过类名调用
+• ✅ 性能较好：没有虚函数开销
+• ✅ 全局访问：可以作为全局函数的替代
+• ✅ 封装性：保持在类的作用域内
+
+缺点：
+• ❌ 不能多态：不能被声明为虚函数
+• ❌ 访问限制：不能访问非静态成员
+• ❌ 测试困难：硬编码的依赖关系难以模拟
+❌ 全局状态：可能导致隐藏的依赖关系
+
+三，关键字
+
+1.override--对父类虚函数进行重写
+
+2.noexcept --保证构造函数不抛出异常
+    函数抛出异常是指函数在执行过程中遇到错误或异常情况时，通过throw关键字抛出一个异常对象，这个异常会沿着调用栈向上传递，   直到被catch块捕获处理。如果一直没有被捕获，程序会终止运行,告诉调用者该函数不会抛出异常，编译器知道函数不会抛出异常后，可以进行更多的优化，因为不需要为异常处理生成额外的代码
+    在STL中，移动构造函数和移动赋值运算符通常用noexcept来标记，这样在容器重新分配内存时，如果移动操作不会抛出异常，容器就会使用移动而不是拷贝，从而提高性能
+    如果noexcept函数抛出了异常，程序会直接调用std::terminate终止，这有利于在开发阶段发现错误
+
+3.explicit--防止编译器的隐式类型转换，只能用于单参数构造函数
+class ExecutorImpl {
+public:
+    // 有 explicit - 安全！
+    explicit ExecutorImpl(const Pose& pose) noexcept;
+};
+
+void processExecutor(ExecutorImpl executor) {
+    // 处理执行器
+}
+Pose pose{10, 20, 'E'};
+// processExecutor(pose);  // 编译错误：不能隐式转换
+processExecutor(ExecutorImpl(pose));  // 必须显式构造
+
+4.nothrow
+new(std::nothrow)意味着如果内存分配失败，不会抛出异常，而是返回 nullptr
+
