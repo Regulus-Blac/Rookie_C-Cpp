@@ -1,0 +1,3 @@
+E:\Cmake\bin\cmake.exe -E rm -f CMakeFiles\EXP1_ZYB-main.dir/objects.a
+E:\.vscode\x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0\mingw64\bin\ar.exe qc CMakeFiles\EXP1_ZYB-main.dir/objects.a @CMakeFiles\EXP1_ZYB-main.dir\objects1.rsp
+E:\.vscode\x86_64-15.2.0-release-win32-seh-ucrt-rt_v13-rev0\mingw64\bin\c++.exe -Wno-deprecated-declarations -Wall -Werror -Wnon-virtual-dtor -Woverloaded-virtual -g -Wl,--whole-archive CMakeFiles\EXP1_ZYB-main.dir/objects.a -Wl,--no-whole-archive -o D:\Study\C\C++\C++SOC\experiment\exp1\EXP1_ZYB\bin\EXP1_ZYB-main.exe -Wl,--out-implib,D:\Study\C\C++\C++SOC\experiment\exp1\EXP1_ZYB\bin\libEXP1_ZYB-main.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\EXP1_ZYB-main.dir\linkLibs.rsp

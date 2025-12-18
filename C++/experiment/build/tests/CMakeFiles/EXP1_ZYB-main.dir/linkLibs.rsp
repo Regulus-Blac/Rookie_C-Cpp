@@ -1,0 +1,1 @@
+ D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/bin/libEXP1_ZYB.a ../lib/libgtest_main.a D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/bin/libEXP1_ZYB.a ../lib/libgtest_main.a ../lib/libgtest.a -lpthread -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
