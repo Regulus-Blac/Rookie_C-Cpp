@@ -1,0 +1,16 @@
+#pragma once
+#include "ActionGroup.hpp"
+
+namespace adas{
+    //  移动命令适配器
+    class CmderOrchestrator{
+    public:
+        virtual ~CmderOrchestrator() = default;
+
+    public:
+        virtual ActionGroup Move(const PoseHandler& poseHandler) const noexcept = 0;
+        virtual ActionGroup TurnLeft(const PoseHandler& poseHandler) const noexcept = 0;
+        virtual ActionGroup TurnRight(const PoseHandler& poseHandler) const noexcept = 0;
+        virtual ActionGroup TurnRound(const PoseHandler& poseHandler) const noexcept = 0;        
+    };
+}
