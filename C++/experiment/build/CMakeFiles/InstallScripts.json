@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/build/cmake_install.cmake",
+		"D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/build/src/cmake_install.cmake",
+		"D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/build/tests/cmake_install.cmake",
+		"D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/build/tests/googletest/cmake_install.cmake",
+		"D:/Study/C/C++/C++SOC/experiment/exp1/EXP1_ZYB/build/tests/googletest/googletest/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
